@@ -1,0 +1,126 @@
+
+import java.io.*;
+import java.util.*;
+
+class Contact {
+    private String name;
+    private String phoneNumber;
+    private String emailAddress;
+
+    public Contact(String name, String phoneNumber, String emailAddress) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + "\nPhone Number: " + phoneNumber + "\nEmail: " + emailAddress;
+    }
+}
+
+class AddressBook {
+    private List<Contact> contacts = new ArrayList<>();
+
+    public void addContact(Contact contact) {
+        contacts.add(contact);
+    }
+
+    public void removeContact(Contact contact) {
+        contacts.remove(contact);
+    }
+
+    public Contact searchContact(String name) {
+        for (Contact contact : contacts) {
+            if (contact.getName().equalsIgnoreCase(name)) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
+    public List<Contact> getAllContacts() {
+        return contacts;
+    }
+}
+
+public class Book {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        AddressBook addressBook = new AddressBook();
+
+        while (true) {
+            System.out.println("Address Book System");
+            System.out.println("1. Add Contact");
+            System.out.println("2. Remove Contact");
+            System.out.println("3. Search Contact");
+            System.out.println("4. Display All Contacts");
+            System.out.println("5. Exit");
+            System.out.print("Select an option: ");
+
+            int ch = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (ch) {
+                case 1:
+                    System.out.print("Enter Name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter Phone Number: ");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.print("Enter Email Address: ");
+                    String emailAddress = scanner.nextLine();
+
+                    Contact newContact = new Contact(name, phoneNumber, emailAddress);
+                    addressBook.addContact(newContact);
+                    System.out.println("Contact added!");
+                    break;
+                case 2:
+                    System.out.print("Enter the name of the contact to remove: ");
+                    String contactToRemove = scanner.nextLine();
+                    Contact removedContact = addressBook.searchContact(contactToRemove);
+                    if (removedContact != null) {
+                        addressBook.removeContact(removedContact);
+                        System.out.println("Contact removed!");
+                    } else {
+                        System.out.println("Contact not found.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter the name of the contact to search: ");
+                    String contactToSearch = scanner.nextLine();
+                    Contact foundContact = addressBook.searchContact(contactToSearch);
+                    if (foundContact != null) {
+                        System.out.println(foundContact);
+                    } else {
+                        System.out.println("Contact not found.");
+                    }
+                    break;
+                case 4:
+                    List<Contact> allContacts = addressBook.getAllContacts();
+                    for (Contact contact : allContacts) {
+                        System.out.println(contact);
+                        System.out.println("-------------------");
+                    }
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please select a valid option.");
+            }
+        }
+    }
+}
